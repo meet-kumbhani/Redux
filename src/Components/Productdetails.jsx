@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import { listurl } from "../Config/urls";
+import { cartlist, listurl } from "../Config/urls";
 
 const Productdetails = () => {
   const [productdata, setProducdata] = useState([]);
+  const [addcart, setaddcart] = useState(false);
+  const [carthandel, setcarthandel] = useState([]);
+
   let { id } = useParams();
 
   useEffect(() => {
@@ -17,6 +20,18 @@ const Productdetails = () => {
         console.log("==>", err);
       });
   }, [id]);
+
+  let handelcart = () => {
+    axios
+      .post("http://localhost:3001/cart", { ...productdata })
+      .then(() => {
+        setaddcart(true);
+        setcarthandel((prev) => [...prev, { ...productdata }]);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   return (
     <>
@@ -34,7 +49,9 @@ const Productdetails = () => {
                   />
                   <div className="buttons mt-4">
                     <button className="buynow-btn me-2">Buy Now</button>
-                    <button className="cart-btn">Add To Cart</button>
+                    <button className="cart-btn" onClick={handelcart}>
+                      Add To Cart
+                    </button>
                   </div>
                 </div>
               </div>

@@ -11,9 +11,9 @@ import './App.css'
 
 
 const App = (props) => {
-  // useEffect(() => {
-  //   props.getcontries()
-  // }, []);
+  useEffect(() => {
+    props.getcontries()
+  }, []);
   return (
     <>
       <BrowserRouter>
@@ -28,5 +28,5 @@ const App = (props) => {
   )
 }
 
-// export default connect(() => { }, { getcontries: Fetchalldata })(App)
-export default App
+export default connect(() => { }, { getcontries: Fetchalldata })(App)
+// export default App
