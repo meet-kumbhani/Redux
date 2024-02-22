@@ -7,12 +7,13 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import MyNavbar from './Components/Mynavbar';
 import Cart from './Components/Cart';
 import Productdetails from './Components/Productdetails';
+import './App.css'
 
 
 const App = (props) => {
-  useEffect(() => {
-    props.getcontries()
-  }, []);
+  // useEffect(() => {
+  //   props.getcontries()
+  // }, []);
   return (
     <>
       <BrowserRouter>
@@ -27,4 +28,5 @@ const App = (props) => {
   )
 }
 
-export default connect(() => { }, { getcontries: Fetchalldata })(App)
+// export default connect(() => { }, { getcontries: Fetchalldata })(App)
+export default App

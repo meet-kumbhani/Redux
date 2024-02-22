@@ -1,12 +1,26 @@
 import { connect } from "react-redux";
-import { Fetchalldata } from "../Services/Module/action";
 import Card from "react-bootstrap/Card";
 import { FormControl, Form } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { listurl } from "../Config/urls";
 
-function Productlist({ products }) {
-  const productsData = products?.data || [];
-  console.log(productsData);
+function Productlist() {
+  // const productsData = products?.data || [];
+
+  const [productsData, setProductsData] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get(listurl)
+      .then((responce) => {
+        setProductsData(responce.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [productsData]);
   return (
     <div className="container-fluid bg-dark">
       <div className="py-3 d-flex justify-content-between align-items-center count-search">
@@ -64,15 +78,17 @@ function Productlist({ products }) {
   );
 }
 
-const mapStateToProps = (state) => {
-  return {
-    products: state.items,
-  };
-};
+// const mapStateToProps = (state) => {
+//   return {
+//     products: state.items,
+//   };
+// };
 
-const mapDispatchToProps = {
-  getproducts: Fetchalldata,
-};
+// const mapDispatchToProps = {
+//   //   getproducts: Fetchalldata,
+// };
 
-const wrapper = connect(mapStateToProps, mapDispatchToProps);
-export default wrapper(Productlist);
+// const wrapper = connect(mapStateToProps, mapDispatchToProps);
+// export default wrapper(Productlist);
+
+export default Productlist;
