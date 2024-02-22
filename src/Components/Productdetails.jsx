@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { cartlist, listurl } from "../Config/urls";
+import ControlPointIcon from "@mui/icons-material/ControlPoint";
+import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 
 const Productdetails = () => {
   const [productdata, setProducdata] = useState([]);
@@ -48,10 +50,34 @@ const Productdetails = () => {
                     height="500px"
                   />
                   <div className="buttons mt-4">
-                    <button className="buynow-btn me-2">Buy Now</button>
+                    {addcart ? (
+                      <>
+                        <button className="buynow-btn me-2">Buy Now</button>
+
+                        <h5 className="d-flex align-items-center">
+                          Quantity:-
+                          <RemoveCircleOutlineIcon
+                            fontSize="small"
+                            className="me-2"
+                          />
+                          {productdata.quantity}
+                          <ControlPointIcon fontSize="small" className="ms-2" />
+                        </h5>
+                      </>
+                    ) : (
+                      <>
+                        <button className="buynow-btn me-2">Buy Now</button>
+                        <button className="cart-btn" onClick={handelcart}>
+                          Add To Cart
+                        </button>
+
+                        {/* <ControlPointIcon fontSize="small" className="ms-2" /> */}
+                      </>
+                    )}
+                    {/* <button className="buynow-btn me-2">Buy Now</button>
                     <button className="cart-btn" onClick={handelcart}>
                       Add To Cart
-                    </button>
+                    </button> */}
                   </div>
                 </div>
               </div>
@@ -72,7 +98,7 @@ const Productdetails = () => {
           </div>
         </>
       ) : (
-        "hello"
+        "Loading...."
       )}
     </>
   );

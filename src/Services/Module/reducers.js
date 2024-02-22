@@ -3,7 +3,8 @@ import * as actionTypes from "./actionTypes"
 const initialstate = {
      loading: false,
      error: "",
-     data: []
+     data: [],
+     items: []
 }
 
 export const modulereducer = (state = initialstate, action) => {
@@ -17,6 +18,26 @@ export const modulereducer = (state = initialstate, action) => {
           case actionTypes.Countries_Loss: {
                return { ...initialstate, loading: false, error: action.payload }
           }
+
+          case actionTypes.INCREASE_QUANTITY:
+               return {
+                    ...state,
+                    data: state.data.map((item) =>
+                         item.id === action.payload.productId
+                              ? { ...item, quantity: item.quantity + 1 }
+                              : item
+                    ),
+               };
+
+          case actionTypes.DECREASE_QUANTITY:
+               return {
+                    ...state,
+                    data: state.data.map((item) =>
+                         item.id === action.payload.productId && item.quantity > 1
+                              ? { ...item, quantity: item.quantity - 1 }
+                              : item
+                    ),
+               };
           default: {
                return state
           }

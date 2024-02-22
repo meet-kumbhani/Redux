@@ -2,10 +2,12 @@ import React from "react";
 import { connect } from "react-redux";
 import ControlPointIcon from "@mui/icons-material/ControlPoint";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
+import { increaseQuantity, decreaseQuantity } from "../Services/Module/action";
 
-const Cart = ({ products }) => {
-  const productsData = products.data;
+const Cart = ({ products, increaseQuantity, decreaseQuantity }) => {
+  const productsData = products.data || [];
   console.log(productsData);
+
   return (
     <>
       <section className="cart-part container">
@@ -25,11 +27,26 @@ const Cart = ({ products }) => {
                 <h5>{item.fullname}</h5>
                 <h5>Price:- ₹{item.price}/- Only❣</h5>
                 <h5>Variant:- {item.storage}</h5>
-                <h5 className="d-flex align-items-center">
+                {/* <h5 className="d-flex align-items-center">
                   Quantity:-
                   <RemoveCircleOutlineIcon fontSize="small" className="me-2" />
                   {item.quantity}
                   <ControlPointIcon fontSize="small" className="ms-2" />
+                </h5> */}
+
+                <h5 className="d-flex align-items-center">
+                  Quantity:-
+                  <RemoveCircleOutlineIcon
+                    fontSize="small"
+                    className="me-2"
+                    onClick={() => decreaseQuantity(item.id)}
+                  />
+                  {item.quantity}
+                  <ControlPointIcon
+                    fontSize="small"
+                    className="ms-2"
+                    onClick={() => increaseQuantity(item.id)}
+                  />
                 </h5>
 
                 <h4>Total:- ₹{item.price * item.quantity}</h4>
@@ -56,6 +73,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = {
   //   getproducts: Fetchalldata,
+  increaseQuantity,
+  decreaseQuantity,
 };
 
 const wrapper = connect(mapStateToProps, mapDispatchToProps);
