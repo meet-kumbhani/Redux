@@ -4,27 +4,26 @@ import axios from "axios"
 
 export const Fetchalldata = () => {
      return (dispatch) => {
-          dispatch({ type: actionTypes.Countries })
+          dispatch({ type: actionTypes.ITEMS })
           axios.get(carturl).then((responce) => {
-               dispatch({ type: actionTypes.Countries_Success, payload: responce.data })
+               dispatch({ type: actionTypes.ITEMS_SUCCESS, payload: responce.data })
           }).catch((err) => {
-               dispatch({ type: actionTypes.Countries_Loss, payload: err?.responce?.data?.err })
+               dispatch({ type: actionTypes.ITEMS_LOSS, payload: err?.responce?.data?.err })
           });
-
           axios
                .delete(`${carturl}/${800}`)
                .then(() => {
                     axios
                          .get(carturl)
                          .then((response) => {
-                              dispatch({ type: actionTypes.Countries_Success, payload: response.data })
+                              dispatch({ type: actionTypes.ITEMS_SUCCESS, payload: response.data })
                          })
                          .catch((err) => {
-                              dispatch({ type: actionTypes.Countries_Loss, payload: err?.responce?.data?.err })
+                              dispatch({ type: actionTypes.ITEMS_LOSS, payload: err?.responce?.data?.err })
                          });
                })
                .catch((err) => {
-                    dispatch({ type: actionTypes.Countries_Loss, payload: err?.responce?.data?.err })
+                    dispatch({ type: actionTypes.ITEMS_LOSS, payload: err?.responce?.data?.err })
                });
      }
 }
@@ -34,7 +33,7 @@ export const removeFromCart = (itemId) => ({
      payload: itemId,
 });
 
-export const updateQuantity = (itemId, newQuantity) => {
+export const Updatequantity = (itemId, newQuantity) => {
      return dispatch => {
           dispatch({
                type: actionTypes.UPDATE_QUANTITY,
@@ -52,7 +51,7 @@ export const updateQuantity = (itemId, newQuantity) => {
 };
 
 
-export const addToCart = (item) => ({
+export const addcart = (item) => ({
      type: actionTypes.ADD_TO_CART,
      payload: item,
 });

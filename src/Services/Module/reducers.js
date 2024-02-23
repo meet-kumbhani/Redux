@@ -8,13 +8,13 @@ const initialstate = {
 
 export const modulereducer = (state = initialstate, action) => {
      switch (action.type) {
-          case actionTypes.Countries: {
+          case actionTypes.ITEMS: {
                return { ...initialstate, loading: true, error: "", data: [] }
           }
-          case actionTypes.Countries_Success: {
+          case actionTypes.ITEMS_SUCCESS: {
                return { ...initialstate, loading: false, data: action.payload }
           }
-          case actionTypes.Countries_Loss: {
+          case actionTypes.ITEMS_LOSS: {
                return { ...initialstate, loading: false, error: action.payload }
           }
           case actionTypes.REMOVE_ITEM: {
@@ -23,15 +23,6 @@ export const modulereducer = (state = initialstate, action) => {
                     data: state.data.filter((item) => item.id !== action.payload),
                };
           }
-          // case actionTypes.UPDATE_QUANTITY: {
-          //      return {
-          //           ...state,
-          //           data: state.data.map(item =>
-          //                item.id === action.payload.itemId ? { ...item, quantity: action.payload.newQuantity } : item
-          //           ),
-          //      };
-          // }
-
           case actionTypes.ADD_TO_CART: {
                return {
                     ...state,

@@ -2,44 +2,27 @@ import React from "react";
 import { connect } from "react-redux";
 import ControlPointIcon from "@mui/icons-material/ControlPoint";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
-import { removeFromCart, updateQuantity } from "../Services/Module/action";
+import { removeFromCart, Updatequantity } from "../Services/Module/action";
 import axios from "axios";
 import { carturl } from "../Config/urls";
 
-const Cart = ({ products, removeFromCart, updateQuantity }) => {
+const Cart = ({ products, removeFromCart, Updatequantity }) => {
   const productsData = products.data;
   console.log(productsData);
-
-  // const handleQuantityChange = (itemId, newQuantity) => {
-  //   if (newQuantity >= 0) {
-  //     updateQuantity(itemId, newQuantity);
-
-  //     axios
-  //       .patch(`${carturl}/${itemId}`, { quantity: newQuantity })
-  //       .then(() => {
-  //         console.log("Quantity updated...");
-  //       })
-  //       .catch((error) => {
-  //         console.log(error);
-  //       });
-  //   }
-  // };
-
-  const handleQuantityChange = (itemId, newQuantity) => {
-    updateQuantity(itemId, newQuantity);
-  };
 
   const handleRemoveFromCart = (itemId) => {
     removeFromCart(itemId);
 
     axios
       .delete(`${carturl}/${itemId}`)
-      .then(() => {
-        console.log("deleted...");
-      })
+      .then(() => {})
       .catch((error) => {
         console.log(error);
       });
+  };
+
+  const handleQuantityChange = (itemId, newQuantity) => {
+    Updatequantity(itemId, newQuantity);
   };
 
   let allitemtotal = productsData.reduce(
@@ -127,19 +110,11 @@ const mapStateToProps = (state) => {
   };
 };
 
-// const mapDispatchToProps = (dispatch) => {
-//   return {
-//     Removeitem: (itemId) => dispatch(Removeitem(itemId)),
-//     updateQuantity: (itemId, newQuantity) =>
-//       dispatch(updateQuantity(itemId, newQuantity)),
-//   };
-// };
-
 const mapDispatchToProps = (dispatch) => {
   return {
     removeFromCart: (itemId) => dispatch(removeFromCart(itemId)),
-    updateQuantity: (itemId, newQuantity) =>
-      dispatch(updateQuantity(itemId, newQuantity)),
+    Updatequantity: (itemId, newQuantity) =>
+      dispatch(Updatequantity(itemId, newQuantity)),
   };
 };
 

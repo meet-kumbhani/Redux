@@ -29,4 +29,3 @@ const App = (props) => {
 }
 
 export default connect(() => { }, { getcontries: Fetchalldata })(App)
-// export default App

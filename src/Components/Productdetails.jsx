@@ -5,14 +5,11 @@ import { carturl, listurl } from "../Config/urls";
 import ControlPointIcon from "@mui/icons-material/ControlPoint";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import { connect } from "react-redux";
-import { addToCart, updateQuantity } from "../Services/Module/action";
+import { addcart, Updatequantity } from "../Services/Module/action";
 
-const Productdetails = ({ cartQuantity }) => {
+const Productdetails = ({ addcart, Updatequantity }) => {
   const [productdata, setProducdata] = useState([]);
-  // const [addcart, setaddcart] = useState(false);
-  // const [carthandel, setcarthandel] = useState([]);
   const [quantity, setQuantity] = useState(1);
-
   let { id } = useParams();
 
   useEffect(() => {
@@ -22,7 +19,7 @@ const Productdetails = ({ cartQuantity }) => {
         setProducdata(result.data);
       })
       .catch((err) => {
-        console.log("==>", err);
+        console.log(err);
       });
   }, [id]);
 
@@ -42,20 +39,11 @@ const Productdetails = ({ cartQuantity }) => {
   }, [id]);
 
   let handelcart = () => {
-    // axios
-    //   .post(carturl, { ...productdata })
-    //   .then(() => {
-    //     setaddcart(true);
-    //     setcarthandel((prev) => [...prev, { ...productdata }]);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
-    addToCart(productdata);
+    addcart(productdata);
     axios
       .post(carturl, { id: productdata.id, ...productdata, quantity: 1 })
       .then((response) => {
-        console.log("added", response.data);
+        console.log(response.data);
         setQuantity(1);
       })
       .catch((error) => {
@@ -64,7 +52,7 @@ const Productdetails = ({ cartQuantity }) => {
   };
 
   const handleQuantityChange = (newQuantity) => {
-    updateQuantity(productdata.id, newQuantity);
+    Updatequantity(productdata.id, newQuantity);
     setQuantity(newQuantity);
     axios
       .patch(`${carturl}/${id}`, { quantity: newQuantity })
@@ -95,7 +83,7 @@ const Productdetails = ({ cartQuantity }) => {
                       <>
                         <button className="buynow-btn me-2">Buy Now</button>
 
-                        <h5 className="d-flex align-items-center">
+                        <h6 className="d-flex align-items-center quntity-btn">
                           Quantity:-
                           <RemoveCircleOutlineIcon
                             fontSize="small"
@@ -108,7 +96,7 @@ const Productdetails = ({ cartQuantity }) => {
                             className="ms-2"
                             onClick={() => handleQuantityChange(quantity + 1)}
                           />
-                        </h5>
+                        </h6>
                       </>
                     ) : (
                       <>
@@ -144,4 +132,4 @@ const Productdetails = ({ cartQuantity }) => {
   );
 };
 
-export default connect(null, { addToCart, updateQuantity })(Productdetails);
+export default connect(null, { addcart, Updatequantity })(Productdetails);

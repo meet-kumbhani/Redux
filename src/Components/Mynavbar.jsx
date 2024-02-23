@@ -11,7 +11,7 @@ const Mynavbar = () => {
         <Link className="nav-link" to="/">
           <img
             alt="logo"
-            src="./rk.png"
+            src="../rk.png"
             width="30"
             height="30"
             className="d-inline-block align-top rounded-circle"
