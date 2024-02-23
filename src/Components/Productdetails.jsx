@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import { cartlist, listurl } from "../Config/urls";
+import { carturl, listurl } from "../Config/urls";
 import ControlPointIcon from "@mui/icons-material/ControlPoint";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
+import { connect } from "react-redux";
+import { addToCart, updateQuantity } from "../Services/Module/action";
 
-const Productdetails = () => {
+const Productdetails = ({ cartQuantity }) => {
   const [productdata, setProducdata] = useState([]);
-  const [addcart, setaddcart] = useState(false);
-  const [carthandel, setcarthandel] = useState([]);
+  // const [addcart, setaddcart] = useState(false);
+  // const [carthandel, setcarthandel] = useState([]);
+  const [quantity, setQuantity] = useState(1);
 
   let { id } = useParams();
 
@@ -23,15 +26,53 @@ const Productdetails = () => {
       });
   }, [id]);
 
-  let handelcart = () => {
+  useEffect(() => {
     axios
-      .post(cartlist, { ...productdata })
-      .then(() => {
-        setaddcart(true);
-        setcarthandel((prev) => [...prev, { ...productdata }]);
+      .get(`${carturl}/${id}`)
+      .then((response) => {
+        if (response.data && response.data.quantity) {
+          setQuantity(response.data.quantity);
+        } else {
+          setQuantity(0);
+        }
       })
-      .catch((err) => {
-        console.log(err);
+      .catch((error) => {
+        console.error("error", error);
+      });
+  }, [id]);
+
+  let handelcart = () => {
+    // axios
+    //   .post(carturl, { ...productdata })
+    //   .then(() => {
+    //     setaddcart(true);
+    //     setcarthandel((prev) => [...prev, { ...productdata }]);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
+    addToCart(productdata);
+    axios
+      .post(carturl, { id: productdata.id, ...productdata, quantity: 1 })
+      .then((response) => {
+        console.log("added", response.data);
+        setQuantity(1);
+      })
+      .catch((error) => {
+        console.error("error", error);
+      });
+  };
+
+  const handleQuantityChange = (newQuantity) => {
+    updateQuantity(productdata.id, newQuantity);
+    setQuantity(newQuantity);
+    axios
+      .patch(`${carturl}/${id}`, { quantity: newQuantity })
+      .then((response) => {
+        console.log("qty updated cart", response.data);
+      })
+      .catch((error) => {
+        console.error("qty error cart", error);
       });
   };
 
@@ -50,7 +91,7 @@ const Productdetails = () => {
                     height="500px"
                   />
                   <div className="buttons mt-4">
-                    {addcart ? (
+                    {quantity ? (
                       <>
                         <button className="buynow-btn me-2">Buy Now</button>
 
@@ -59,9 +100,14 @@ const Productdetails = () => {
                           <RemoveCircleOutlineIcon
                             fontSize="small"
                             className="me-2"
+                            onClick={() => handleQuantityChange(quantity - 1)}
                           />
-                          {productdata.quantity}
-                          <ControlPointIcon fontSize="small" className="ms-2" />
+                          {quantity}
+                          <ControlPointIcon
+                            fontSize="small"
+                            className="ms-2"
+                            onClick={() => handleQuantityChange(quantity + 1)}
+                          />
                         </h5>
                       </>
                     ) : (
@@ -70,14 +116,8 @@ const Productdetails = () => {
                         <button className="cart-btn" onClick={handelcart}>
                           Add To Cart
                         </button>
-
-                        {/* <ControlPointIcon fontSize="small" className="ms-2" /> */}
                       </>
                     )}
-                    {/* <button className="buynow-btn me-2">Buy Now</button>
-                    <button className="cart-btn" onClick={handelcart}>
-                      Add To Cart
-                    </button> */}
                   </div>
                 </div>
               </div>
@@ -104,4 +144,4 @@ const Productdetails = () => {
   );
 };
 
-export default Productdetails;
+export default connect(null, { addToCart, updateQuantity })(Productdetails);

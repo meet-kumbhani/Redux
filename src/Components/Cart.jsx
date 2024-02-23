@@ -4,32 +4,36 @@ import ControlPointIcon from "@mui/icons-material/ControlPoint";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import { removeFromCart, updateQuantity } from "../Services/Module/action";
 import axios from "axios";
-import { cartlist } from "../Config/urls";
+import { carturl } from "../Config/urls";
 
 const Cart = ({ products, removeFromCart, updateQuantity }) => {
   const productsData = products.data;
   console.log(productsData);
 
-  const handleQuantityChange = (itemId, newQuantity) => {
-    if (newQuantity >= 0) {
-      updateQuantity(itemId, newQuantity);
+  // const handleQuantityChange = (itemId, newQuantity) => {
+  //   if (newQuantity >= 0) {
+  //     updateQuantity(itemId, newQuantity);
 
-      axios
-        .patch(`${cartlist}/${itemId}`, { quantity: newQuantity })
-        .then(() => {
-          console.log("Quantity updated...");
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    }
+  //     axios
+  //       .patch(`${carturl}/${itemId}`, { quantity: newQuantity })
+  //       .then(() => {
+  //         console.log("Quantity updated...");
+  //       })
+  //       .catch((error) => {
+  //         console.log(error);
+  //       });
+  //   }
+  // };
+
+  const handleQuantityChange = (itemId, newQuantity) => {
+    updateQuantity(itemId, newQuantity);
   };
 
   const handleRemoveFromCart = (itemId) => {
     removeFromCart(itemId);
 
     axios
-      .delete(`${cartlist}/${itemId}`)
+      .delete(`${carturl}/${itemId}`)
       .then(() => {
         console.log("deleted...");
       })
@@ -37,6 +41,28 @@ const Cart = ({ products, removeFromCart, updateQuantity }) => {
         console.log(error);
       });
   };
+
+  let allitemtotal = productsData.reduce(
+    (total, item) => total + item?.price * item?.quantity,
+    0
+  );
+
+  if (!allitemtotal) {
+    return (
+      <>
+        <div className="d-flex justify-content-center mt-4">
+          <img
+            src="https://rukminim2.flixcart.com/www/800/800/promos/16/05/2019/d438a32e-765a-4d8b-b4a6-520b560971e8.png?q=90"
+            alt=""
+            className="h-50 w-50"
+          />
+        </div>
+
+        <h2 className="text-center">Your Cart is empty</h2>
+        <h5 className="text-center">Shop today's deals</h5>
+      </>
+    );
+  }
 
   return (
     <>
@@ -89,7 +115,7 @@ const Cart = ({ products, removeFromCart, updateQuantity }) => {
           </div>
         ))}
         <hr />
-        <h3 className="text-end">Total Amount: ₹{0}</h3>
+        <h3 className="text-end">Total Amount: ₹{allitemtotal}</h3>
       </section>
     </>
   );
@@ -101,8 +127,12 @@ const mapStateToProps = (state) => {
   };
 };
 
-// const mapDispatchToProps = {
-//   //   getproducts: Fetchalldata,
+// const mapDispatchToProps = (dispatch) => {
+//   return {
+//     Removeitem: (itemId) => dispatch(Removeitem(itemId)),
+//     updateQuantity: (itemId, newQuantity) =>
+//       dispatch(updateQuantity(itemId, newQuantity)),
+//   };
 // };
 
 const mapDispatchToProps = (dispatch) => {
@@ -113,6 +143,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-// const wrapper = connect(mapStateToProps, mapDispatchToProps);
-// export default wrapper(Cart);
 export default connect(mapStateToProps, mapDispatchToProps)(Cart);

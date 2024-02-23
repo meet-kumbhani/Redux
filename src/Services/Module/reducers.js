@@ -23,12 +23,30 @@ export const modulereducer = (state = initialstate, action) => {
                     data: state.data.filter((item) => item.id !== action.payload),
                };
           }
+          // case actionTypes.UPDATE_QUANTITY: {
+          //      return {
+          //           ...state,
+          //           data: state.data.map(item =>
+          //                item.id === action.payload.itemId ? { ...item, quantity: action.payload.newQuantity } : item
+          //           ),
+          //      };
+          // }
+
+          case actionTypes.ADD_TO_CART: {
+               return {
+                    ...state,
+                    data: [...state.data, action.payload],
+               };
+          }
           case actionTypes.UPDATE_QUANTITY: {
                return {
                     ...state,
-                    data: state.data.map(item =>
-                         item.id === action.payload.itemId ? { ...item, quantity: action.payload.newQuantity } : item
-                    ),
+                    data: state.data.map(item => {
+                         if (item.id === action.payload.itemId) {
+                              return { ...item, quantity: action.payload.newQuantity };
+                         }
+                         return item;
+                    })
                };
           }
           default: {
