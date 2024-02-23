@@ -25,7 +25,7 @@ const Productdetails = () => {
 
   let handelcart = () => {
     axios
-      .post("http://localhost:3001/cart", { ...productdata })
+      .post(cartlist, { ...productdata })
       .then(() => {
         setaddcart(true);
         setcarthandel((prev) => [...prev, { ...productdata }]);

@@ -29,15 +29,14 @@ export const Fetchalldata = () => {
      }
 }
 
-
-export const increaseQuantity = (productId) => ({
-     type: actionTypes.INCREASE_QUANTITY,
-     payload: { productId },
+export const removeFromCart = (itemId) => ({
+     type: actionTypes.REMOVE_ITEM,
+     payload: itemId,
 });
 
-export const decreaseQuantity = (productId) => ({
-     type: actionTypes.DECREASE_QUANTITY,
-     payload: { productId },
+export const updateQuantity = (itemId, newQuantity) => ({
+     type: actionTypes.UPDATE_QUANTITY,
+     payload: { itemId, newQuantity },
 });
 
 // https://restcountries.com/v3.1/all
