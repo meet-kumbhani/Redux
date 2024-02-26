@@ -28,11 +28,6 @@ export const Fetchalldata = () => {
      }
 }
 
-export const removeFromCart = (itemId) => ({
-     type: actionTypes.REMOVE_ITEM,
-     payload: itemId,
-});
-
 export const Updatequantity = (itemId, newQuantity) => {
      return dispatch => {
           dispatch({
@@ -42,18 +37,20 @@ export const Updatequantity = (itemId, newQuantity) => {
 
           axios.patch(`${carturl}/${itemId}`, { quantity: newQuantity })
                .then(response => {
-                    console.log("Quantity updated successfully:", response.data);
+                    console.log(response.data);
                })
                .catch(error => {
-                    console.error("Error updating quantity:", error);
+                    console.error(error);
                });
      };
 };
 
+export const removeitem = (itemId) => ({
+     type: actionTypes.REMOVE_ITEM,
+     payload: itemId,
+});
 
 export const addcart = (item) => ({
      type: actionTypes.ADD_TO_CART,
      payload: item,
 });
-
-// https://restcountries.com/v3.1/all

@@ -2,16 +2,16 @@ import React from "react";
 import { connect } from "react-redux";
 import ControlPointIcon from "@mui/icons-material/ControlPoint";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
-import { removeFromCart, Updatequantity } from "../Services/Module/action";
+import { removeitem, Updatequantity } from "../Services/Module/action";
 import axios from "axios";
 import { carturl } from "../Config/urls";
 
-const Cart = ({ products, removeFromCart, Updatequantity }) => {
+const Cart = ({ products, removeitem, Updatequantity }) => {
   const productsData = products.data;
   console.log(productsData);
 
-  const handleRemoveFromCart = (itemId) => {
-    removeFromCart(itemId);
+  const Removeitem = (itemId) => {
+    removeitem(itemId);
 
     axios
       .delete(`${carturl}/${itemId}`)
@@ -21,8 +21,10 @@ const Cart = ({ products, removeFromCart, Updatequantity }) => {
       });
   };
 
-  const handleQuantityChange = (itemId, newQuantity) => {
-    Updatequantity(itemId, newQuantity);
+  const Quantitychange = (itemId, newQuantity) => {
+    if (newQuantity > 0) {
+      Updatequantity(itemId, newQuantity);
+    }
   };
 
   let allitemtotal = productsData.reduce(
@@ -71,17 +73,13 @@ const Cart = ({ products, removeFromCart, Updatequantity }) => {
                   <RemoveCircleOutlineIcon
                     fontSize="small"
                     className="me-2"
-                    onClick={() =>
-                      handleQuantityChange(item.id, item.quantity - 1)
-                    }
+                    onClick={() => Quantitychange(item.id, item.quantity - 1)}
                   />
                   {item.quantity}
                   <ControlPointIcon
                     fontSize="small"
                     className="ms-2"
-                    onClick={() =>
-                      handleQuantityChange(item.id, item.quantity + 1)
-                    }
+                    onClick={() => Quantitychange(item.id, item.quantity + 1)}
                   />
                 </h5>
 
@@ -89,7 +87,7 @@ const Cart = ({ products, removeFromCart, Updatequantity }) => {
 
                 <button
                   className="btn btn-outline-danger rounded-pill"
-                  onClick={() => handleRemoveFromCart(item.id)}
+                  onClick={() => Removeitem(item.id)}
                 >
                   Remove item
                 </button>
@@ -112,7 +110,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    removeFromCart: (itemId) => dispatch(removeFromCart(itemId)),
+    removeitem: (itemId) => dispatch(removeitem(itemId)),
     Updatequantity: (itemId, newQuantity) =>
       dispatch(Updatequantity(itemId, newQuantity)),
   };

@@ -3,8 +3,9 @@ import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
 
-const Mynavbar = () => {
+const Mynavbar = ({ cartLength }) => {
   return (
     <Navbar expand="lg" className="bg-body-tertiary px-2">
       <Navbar.Brand>
@@ -28,7 +29,7 @@ const Mynavbar = () => {
         </Nav>
         <Link to="/cart" className="nav-link">
           <span className="position-absolute translate-middle badge rounded-pill bg-danger">
-            {0}
+            {cartLength}
           </span>
           <AddShoppingCartIcon /> Cart
         </Link>
@@ -37,4 +38,12 @@ const Mynavbar = () => {
   );
 };
 
-export default Mynavbar;
+// export default Mynavbar;
+
+const mapStateToProps = (state) => {
+  return {
+    cartLength: state.items.data.length,
+  };
+};
+
+export default connect(mapStateToProps)(Mynavbar);
